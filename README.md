@@ -198,10 +198,26 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 
 ## 🔒 Seguridad
 
-- UFW habilitado (solo 22, 80, 443)
-- SSH solo con keys
-- Archivos sensibles con chmod 600
-- Secrets en variables de entorno
+**Ver [SECURITY.md](SECURITY.md) para guía completa.**
+
+### Implementado automáticamente:
+- ✅ UFW firewall (solo 22, 80, 443)
+- ✅ SSH hardening (password auth disabled)
+- ✅ Fail2ban (anti brute-force)
+- ✅ Automatic security updates
+- ✅ Secure file permissions (600/700)
+- ✅ .gitignore para secrets
+
+### Script de auditoría:
+```bash
+./scripts/security-audit.sh
+```
+
+### Checklist post-deploy:
+- [ ] Verificar UFW: `ufw status`
+- [ ] Verificar SSH: `grep PasswordAuth /etc/ssh/sshd_config`
+- [ ] Verificar fail2ban: `systemctl status fail2ban`
+- [ ] Configurar SSL si tienes dominio
 
 ## 🖥️ Dashboard (Opcional)
 

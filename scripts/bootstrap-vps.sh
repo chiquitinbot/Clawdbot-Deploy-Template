@@ -264,13 +264,50 @@ EOF
 
 # Configure UFW
 echo -e "${YELLOW}🔥 Configuring firewall...${NC}"
+ufw default deny incoming
+ufw default allow outgoing
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw --force enable
 
-# Set permissions
+# Set secure permissions
+echo -e "${YELLOW}🔐 Setting secure file permissions...${NC}"
 chmod 700 "$WORKSPACE/.secrets"
+chmod 700 "$WORKSPACE"
+[ -f "$HOME/.env" ] && chmod 600 "$HOME/.env"
+
+# SSH Hardening
+echo -e "${YELLOW}🔑 Hardening SSH...${NC}"
+if grep -q "^PasswordAuthentication yes" /etc/ssh/sshd_config; then
+    sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+    echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+    systemctl restart sshd
+    echo "  SSH password auth disabled"
+fi
+
+# Install fail2ban
+echo -e "${YELLOW}🛡️ Installing fail2ban...${NC}"
+apt-get install -y -qq fail2ban
+cat > /etc/fail2ban/jail.local << 'JAIL'
+[sshd]
+enabled = true
+port = 22
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 3
+bantime = 3600
+findtime = 600
+JAIL
+systemctl enable fail2ban
+systemctl restart fail2ban
+
+# Enable automatic security updates
+echo -e "${YELLOW}📦 Enabling automatic security updates...${NC}"
+apt-get install -y -qq unattended-upgrades
+echo 'APT::Periodic::Update-Package-Lists "1";' > /etc/apt/apt.conf.d/20auto-upgrades
+echo 'APT::Periodic::Unattended-Upgrade "1";' >> /etc/apt/apt.conf.d/20auto-upgrades
 
 # Add to bashrc
 echo "export WORKSPACE=\"$WORKSPACE\"" >> /root/.bashrc
