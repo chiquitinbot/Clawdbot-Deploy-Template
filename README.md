@@ -27,6 +27,12 @@ Template completo para desplegar un agente AI personal con la arquitectura de Ch
 - **Mission Control** - Kanban de tareas
 - **Agent Profiles** - Visualización de agentes
 
+### Judgment System
+- **DeepEval** - Evaluación de decisiones con LLM-as-Judge
+- **Risk Matrix** - Clasificación automática de riesgo
+- **Confidence Scoring** - Calibración de confianza
+- **Decision Logging** - Auditoría de todas las decisiones
+
 ## 🏗️ Arquitectura
 
 ```
