@@ -6,11 +6,21 @@
 
 ## ✅ Checklist
 
-### 🔑 API Keys (Obligatorias)
+### 🔑 Anthropic (OBLIGATORIO - elige una opción)
 
+**Opción A: API Key (pago por uso)**
 | Item | Dónde obtenerlo | Variable |
 |------|-----------------|----------|
 | ☐ Anthropic API Key | https://console.anthropic.com/settings/keys | `ANTHROPIC_API_KEY` |
+
+**Opción B: Claude Max Subscription ($100-200/mes, uso ilimitado)**
+| Item | Dónde obtenerlo | Variable |
+|------|-----------------|----------|
+| ☐ Claude Max Token | https://claude.ai → Settings → API | `ANTHROPIC_API_KEY` |
+
+> 💡 **¿Cuál elegir?**
+> - **API Key**: Mejor si usas poco (~$3-15/mes)
+> - **Claude Max**: Mejor si usas mucho (ilimitado por $100-200/mes)
 
 ### 🔑 API Keys (Opcionales pero recomendadas)
 
@@ -63,7 +73,9 @@
 
 ## 📝 Instrucciones Detalladas
 
-### 1. Anthropic API Key (OBLIGATORIO)
+### 1. Anthropic - API Key o Claude Max (OBLIGATORIO)
+
+**Opción A: API Key (pago por uso)**
 
 1. Ve a https://console.anthropic.com/
 2. Crea cuenta o inicia sesión
@@ -71,7 +83,21 @@
 4. Click "Create Key"
 5. Copia la key (empieza con `sk-ant-`)
 
-**Costo:** ~$3/millón de tokens con Claude Sonnet
+**Costo:** ~$3/millón de tokens con Claude Sonnet, ~$15/millón con Opus
+
+---
+
+**Opción B: Claude Max Subscription (uso ilimitado)**
+
+1. Ve a https://claude.ai/
+2. Suscríbete a Claude Max ($100 o $200/mes)
+3. Ve a Settings > API (o claude.ai/settings)
+4. Genera un token de API
+5. Copia el token
+
+**Costo:** $100/mes (Max) o $200/mes (Max con más límites)
+
+> 💡 Claude Max es mejor si planeas usar el agente intensivamente (muchas conversaciones, tareas largas, múltiples agentes)
 
 ---
 
