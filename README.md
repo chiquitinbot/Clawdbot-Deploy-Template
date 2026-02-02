@@ -6,29 +6,44 @@ Infraestructura como código para desplegar tu propio agente AI personal — ya 
 
 ## 🚀 Quick Start
 
+### Modo Básico (sin dominio)
+
 ```bash
 # 1. Clonar
 git clone https://github.com/chiquitinbot/Clawdbot-Deploy-Template
 cd Clawdbot-Deploy-Template
 
-# 2. Configurar (lee PREREQUISITES.md primero)
+# 2. Configurar
 cp .env.example .env
-nano .env  # Llenar con tus API keys y DOMINIO
+nano .env  # Llenar con tus API keys
 
-# 3. Validar configuración
+# 3. Validar
 ./scripts/validate-env.sh
 
-# 4. Deploy (elige uno)
-./scripts/bootstrap-vps.sh           # VPS existente
-./scripts/bootstrap-local.sh         # Mac/Linux local
-cd terraform && terraform apply       # Nuevo droplet en DO
+# 4. Deploy
+./scripts/bootstrap-vps.sh      # VPS
+./scripts/bootstrap-local.sh    # Mac/Linux local
 
-# 5. Configurar SSL (después de que DNS apunte al servidor)
+# 5. Iniciar
+openclaw wizard        # Primera vez
+openclaw gateway start # Iniciar agente
+```
+
+### Modo Completo (con dominio + SSL)
+
+```bash
+# 1-4. Igual que arriba...
+
+# 5. Configurar DNS (apuntar dominio a IP del VPS)
+
+# 6. Configurar SSL
 ./scripts/setup-nginx-ssl.sh agent.tudominio.com
 
-# 6. Iniciar OpenClaw
-openclaw wizard        # Configurar por primera vez
-openclaw gateway start # Iniciar el agente
+# 7. Iniciar
+openclaw wizard
+openclaw gateway start
+
+# Tu agente estará en https://agent.tudominio.com
 ```
 
 ## ⚠️ ANTES DE EMPEZAR
@@ -36,13 +51,20 @@ openclaw gateway start # Iniciar el agente
 **Lee [PREREQUISITES.md](PREREQUISITES.md) para obtener todo lo necesario.**
 
 ### Checklist obligatorio:
-- [ ] **Dominio** - Necesitas un dominio/subdominio (ej: agent.tusite.com)
 - [ ] **Anthropic API Key** o Claude Max subscription
 - [ ] **Discord Bot Token** O **Telegram Bot Token** (al menos uno)
 
-### Recomendado:
+### Opcional:
+- [ ] **Dominio** - Solo si quieres SSL y webhooks externos
 - [ ] Gemini API Key - gratis, para tareas económicas
 - [ ] Digital Ocean Token - si usas Terraform
+
+### Dos modos de deploy:
+
+| Modo | Dominio | Nginx | SSL | Webhooks |
+|------|---------|-------|-----|----------|
+| **Básico** | ❌ No | ❌ No | ❌ No | ❌ No |
+| **Completo** | ✅ Sí | ✅ Sí | ✅ Sí | ✅ Sí |
 
 ---
 

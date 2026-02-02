@@ -38,14 +38,16 @@
 | ☐ Discord Channel ID | Click derecho en canal > Copy Channel ID | `DISCORD_CHANNEL_ID` |
 | ☐ Telegram Bot Token | https://t.me/BotFather → /newbot | `TELEGRAM_BOT_TOKEN` |
 
-### 🌐 Dominio (OBLIGATORIO)
+### 🌐 Dominio (OPCIONAL - para SSL y webhooks)
 
 | Item | Dónde obtenerlo | Variable |
 |------|-----------------|----------|
 | ☐ Dominio registrado | Namecheap, Cloudflare, GoDaddy, etc. | `DOMAIN` |
-| ☐ Subdominio para el agente | Ej: agent.tudominio.com | `AGENT_SUBDOMAIN` |
+| ☐ Subdominio para el agente | Ej: agent.tudominio.com | - |
 
-> 💡 El dominio es necesario para SSL (HTTPS) y webhooks. Puedes usar un subdominio de un dominio que ya tengas.
+> 💡 **¿Necesito dominio?**
+> - **NO** si solo quieres el agente funcionando (Discord/Telegram)
+> - **SÍ** si quieres webhooks externos, dashboard público, o SSL
 
 ### ☁️ Infraestructura (VPS)
 

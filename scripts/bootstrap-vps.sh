@@ -66,11 +66,10 @@ apt-get upgrade -y -qq
 echo -e "${YELLOW}📦 Installing dependencies...${NC}"
 apt-get install -y -qq curl git jq ufw python3 python3-pip
 
-# Install Nginx
-echo -e "${YELLOW}🌐 Installing Nginx...${NC}"
-apt-get install -y -qq nginx
-systemctl enable nginx
-systemctl start nginx
+# Nginx is optional - only needed if you have a domain
+# Run ./scripts/setup-nginx-ssl.sh <domain> after bootstrap if needed
+echo -e "${YELLOW}ℹ️  Nginx not installed (optional)${NC}"
+echo "   Run ./scripts/setup-nginx-ssl.sh <domain> if you need SSL/webhooks"
 
 # Install Node.js 22
 if ! command -v node &> /dev/null; then
