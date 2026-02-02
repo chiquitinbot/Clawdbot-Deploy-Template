@@ -48,7 +48,13 @@ openclaw gateway start
 
 ## ⚠️ ANTES DE EMPEZAR
 
-**Lee [PREREQUISITES.md](PREREQUISITES.md) para obtener todo lo necesario.**
+1. **[REQUIREMENTS.md](REQUIREMENTS.md)** - Software necesario en tu máquina
+2. **[PREREQUISITES.md](PREREQUISITES.md)** - API keys y cuentas necesarias
+
+```bash
+# Verificar que tienes el software necesario
+./scripts/check-requirements.sh
+```
 
 ### Checklist obligatorio:
 - [ ] **Anthropic API Key** o Claude Max subscription
