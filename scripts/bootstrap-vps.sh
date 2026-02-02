@@ -4,7 +4,7 @@
 # For Ubuntu 22.04+ / Debian 12+
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/mexaverse/agent-template/main/scripts/bootstrap-vps.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/chiquitinbot/Clawdbot-Deploy-Template/master/scripts/bootstrap-vps.sh | bash
 #
 # Or with options:
 #   ./bootstrap-vps.sh --name my-agent --workspace /root/my-agent

@@ -157,7 +157,7 @@ terraform apply
 ### Opción 2: Script Bootstrap (VPS existente)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/mexaverse/agent-template/main/scripts/bootstrap-vps.sh | bash
+curl -fsSL https://raw.githubusercontent.com/chiquitinbot/Clawdbot-Deploy-Template/master/scripts/bootstrap-vps.sh | bash
 ```
 
 ### Opción 3: Bare Metal (Mac/Linux)
