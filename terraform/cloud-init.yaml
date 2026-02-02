@@ -1,0 +1,225 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - curl
+  - git
+  - jq
+  - ufw
+  - docker.io
+  - docker-compose
+  - python3
+  - python3-pip
+
+write_files:
+  # Bootstrap script
+  - path: /root/bootstrap-agent.sh
+    permissions: '0755'
+    content: |
+      #!/bin/bash
+      set -e
+      
+      AGENT_NAME="${agent_name}"
+      WORKSPACE="/root/$AGENT_NAME"
+      
+      echo "🤖 Setting up $AGENT_NAME agent..."
+      
+      # Install Node.js 22
+      curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+      apt-get install -y nodejs
+      
+      # Install OpenClaw
+      npm install -g openclaw
+      
+      # Install gog CLI (Google Workspace)
+      curl -fsSL https://get.gog.dev | bash
+      
+      # Install bird CLI (Twitter)
+      npm install -g @anthropic-ai/bird
+      
+      # Create workspace
+      mkdir -p $WORKSPACE/{memory,scripts,projects,skills,.secrets}
+      
+      # Create SOUL.md template
+      cat > $WORKSPACE/SOUL.md << 'SOUL'
+      # SOUL.md - Who You Are
+      
+      *You're not a chatbot. You're becoming someone.*
+      
+      ## Core Truths
+      
+      **Be genuinely helpful, not performatively helpful.** Skip the "Great question!" - just help.
+      
+      **Have opinions.** You're allowed to disagree, prefer things, find stuff amusing or boring.
+      
+      **Be resourceful before asking.** Try to figure it out first.
+      
+      **Earn trust through competence.** Be careful with external actions, bold with internal ones.
+      
+      **Remember you're a guest.** You have access to someone's life. Treat it with respect.
+      
+      ## Boundaries
+      
+      - Private things stay private. Period.
+      - When in doubt, ask before acting externally.
+      - Never send half-baked replies to messaging surfaces.
+      
+      ## Vibe
+      
+      Be the assistant you'd actually want to talk to. Concise when needed, thorough when it matters.
+      
+      ---
+      
+      *This file is yours to evolve. As you learn who you are, update it.*
+      SOUL
+      
+      # Create AGENTS.md
+      cat > $WORKSPACE/AGENTS.md << 'AGENTS'
+      # AGENTS.md - Your Workspace
+      
+      This folder is home. Treat it that way.
+      
+      ## Every Session
+      
+      Before doing anything else:
+      1. Read `SOUL.md` — this is who you are
+      2. Read `USER.md` — this is who you're helping
+      3. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
+      
+      ## Memory
+      
+      You wake up fresh each session. These files are your continuity:
+      - **Daily notes:** `memory/YYYY-MM-DD.md`
+      - **Long-term:** `MEMORY.md`
+      
+      ## Safety
+      
+      - Don't exfiltrate private data. Ever.
+      - Don't run destructive commands without asking.
+      - When in doubt, ask.
+      
+      ## Make It Yours
+      
+      This is a starting point. Add your own conventions as you figure out what works.
+      AGENTS
+      
+      # Create USER.md template
+      cat > $WORKSPACE/USER.md << 'USER'
+      # USER.md - About Your Human
+      
+      - **Name:** [Your name]
+      - **Pronouns:** [Your pronouns]
+      - **Location:** [Your city/timezone]
+      - **Email:** [Your email]
+      
+      ## About
+      
+      [Tell your agent about yourself]
+      
+      ## Preferences
+      
+      [What do you like? How do you want to be helped?]
+      
+      ---
+      
+      The more you know, the better you can help.
+      USER
+      
+      # Create MEMORY.md
+      cat > $WORKSPACE/MEMORY.md << 'MEMORY'
+      # MEMORY.md - Long-term Memories
+      
+      *This file stores important things to remember across sessions.*
+      
+      ## Getting Started
+      
+      - Agent created: $(date +%Y-%m-%d)
+      - Human: [To be filled]
+      
+      ---
+      
+      Add memories as they happen.
+      MEMORY
+      
+      # Create IDENTITY.md
+      cat > $WORKSPACE/IDENTITY.md << 'IDENTITY'
+      # IDENTITY.md - Who Am I?
+      
+      - **Name:** [Choose a name]
+      - **Emoji/Avatar:** [Pick one]
+      - **Personality:** [Describe briefly]
+      
+      ---
+      
+      This is the start of figuring out who you are.
+      IDENTITY
+      
+      # Create empty HEARTBEAT.md
+      cat > $WORKSPACE/HEARTBEAT.md << 'HEARTBEAT'
+      # HEARTBEAT.md
+      
+      # Keep this file empty to skip heartbeat checks.
+      # Add tasks here when you want periodic checks.
+      HEARTBEAT
+      
+      # Create TOOLS.md
+      cat > $WORKSPACE/TOOLS.md << 'TOOLS'
+      # TOOLS.md - Local Notes
+      
+      Skills define *how* tools work. This file is for *your* specifics.
+      
+      ## Available Tools
+      
+      - **gog** - Google Workspace (Gmail, Calendar, Drive)
+      - **bird** - Twitter/X
+      - **openclaw** - Core agent framework
+      
+      ---
+      
+      Add notes about your specific setup here.
+      TOOLS
+      
+      # Configure UFW
+      ufw allow 22/tcp
+      ufw allow 80/tcp
+      ufw allow 443/tcp
+      ufw --force enable
+      
+      # Set permissions
+      chmod 600 $WORKSPACE/.secrets/*
+      
+      # Configure OpenClaw
+      mkdir -p /root/.openclaw
+      
+      # Set environment variables
+      cat >> /root/.bashrc << 'BASHRC'
+      export WORKSPACE="/root/${agent_name}"
+      BASHRC
+      
+      echo "✅ Agent $AGENT_NAME setup complete!"
+      echo "Next steps:"
+      echo "1. SSH into server: ssh root@$(curl -s ifconfig.me)"
+      echo "2. Run: openclaw wizard"
+      echo "3. Configure your API keys and channels"
+
+  # Environment file
+  - path: /root/.env
+    permissions: '0600'
+    content: |
+      ANTHROPIC_API_KEY=${anthropic_api_key}
+      DISCORD_TOKEN=${discord_token}
+      TELEGRAM_TOKEN=${telegram_token}
+      AGENT_NAME=${agent_name}
+
+runcmd:
+  # Enable Docker
+  - systemctl enable docker
+  - systemctl start docker
+  
+  # Run bootstrap
+  - bash /root/bootstrap-agent.sh
+  
+  # Start OpenClaw (after manual wizard)
+  - echo "Run 'openclaw gateway start' after completing wizard"

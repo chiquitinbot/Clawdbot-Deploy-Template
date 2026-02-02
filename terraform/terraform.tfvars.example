@@ -1,0 +1,35 @@
+# Digital Ocean API Token
+# Get from: https://cloud.digitalocean.com/account/api/tokens
+do_token = "dop_v1_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Agent name (will be used for droplet name and workspace folder)
+agent_name = "my-agent"
+
+# Region (nyc1, sfo3, lon1, fra1, sgp1, etc.)
+region = "nyc1"
+
+# Droplet size
+# s-1vcpu-1gb  = $6/month  (basic)
+# s-2vcpu-4gb  = $24/month (recommended)
+# s-4vcpu-8gb  = $48/month (heavy use)
+size = "s-2vcpu-4gb"
+
+# SSH Key name as registered in Digital Ocean
+# List yours: doctl compute ssh-key list
+ssh_key_fingerprint = "my-ssh-key"
+
+# Domain (optional - leave empty if not using custom domain)
+# Must be a domain you've added to DO and pointed nameservers
+domain = ""
+
+# Anthropic API Key (required)
+# Get from: https://console.anthropic.com/
+anthropic_api_key = "sk-ant-api03-xxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Discord Bot Token (optional)
+# Create bot: https://discord.com/developers/applications
+discord_token = ""
+
+# Telegram Bot Token (optional)
+# Create bot: https://t.me/BotFather
+telegram_token = ""

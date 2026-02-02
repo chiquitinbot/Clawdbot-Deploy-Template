@@ -1,0 +1,188 @@
+# 🤖 Autonomis Agent Template
+
+Template completo para desplegar un agente AI personal con la arquitectura de Chiquitín.
+
+## 📋 Qué incluye
+
+### Core
+- **OpenClaw** - Framework de agente AI
+- **Workspace** - Estructura de archivos (SOUL.md, AGENTS.md, etc.)
+- **Cron Jobs** - Tareas programadas
+
+### Integraciones
+- **Discord** - Canal de comunicación principal
+- **Telegram** - Canal alternativo
+- **Gmail** - Clasificación automática de emails (gog CLI)
+- **Twitter/X** - Engagement social (bird CLI)
+- **Google Calendar** - Eventos y recordatorios
+
+### Infraestructura
+- **Docker** - n8n, nginx, servicios custom
+- **UFW** - Firewall configurado
+- **SSL** - Certificados Let's Encrypt
+- **Supabase** - Base de datos para dashboard
+
+### Dashboard
+- **Autonomis Dashboard** - Next.js + Supabase
+- **Mission Control** - Kanban de tareas
+- **Agent Profiles** - Visualización de agentes
+
+## 🏗️ Arquitectura
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     DIGITAL OCEAN VPS                        │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │                      NGINX (443)                         ││
+│  │         SSL + Reverse Proxy + WebSocket                  ││
+│  └─────────────────────────────────────────────────────────┘│
+│           │                    │                             │
+│           ▼                    ▼                             │
+│  ┌──────────────┐    ┌──────────────┐                       │
+│  │     n8n      │    │   CrewAI     │                       │
+│  │   (5678)     │    │   (8080)     │                       │
+│  └──────────────┘    └──────────────┘                       │
+│                                                              │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │                    OPENCLAW GATEWAY                      ││
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐    ││
+│  │  │ Discord │  │Telegram │  │  Cron   │  │  Tools  │    ││
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘    ││
+│  └─────────────────────────────────────────────────────────┘│
+│                           │                                  │
+│                           ▼                                  │
+│  ┌─────────────────────────────────────────────────────────┐│
+│  │                      WORKSPACE                           ││
+│  │   /root/agent/                                          ││
+│  │   ├── SOUL.md          (Personalidad)                   ││
+│  │   ├── AGENTS.md        (Instrucciones)                  ││
+│  │   ├── USER.md          (Info del usuario)               ││
+│  │   ├── MEMORY.md        (Memoria largo plazo)            ││
+│  │   ├── memory/          (Logs diarios)                   ││
+│  │   ├── scripts/         (Automatizaciones)               ││
+│  │   └── projects/        (Proyectos)                      ││
+│  └─────────────────────────────────────────────────────────┘│
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    SERVICIOS EXTERNOS                        │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
+│  │ Anthropic│  │ Google  │  │ Supabase│  │ Discord │        │
+│  │   API   │  │  APIs   │  │   DB    │  │   Bot   │        │
+│  └─────────┘  └─────────┘  └─────────┘  └─────────┘        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+## 🚀 Deployment
+
+### Opción 1: Terraform (VPS - Recomendado)
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars
+# Editar terraform.tfvars con tus valores
+terraform init
+terraform plan
+terraform apply
+```
+
+### Opción 2: Script Bootstrap (VPS existente)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/mexaverse/agent-template/main/scripts/bootstrap-vps.sh | bash
+```
+
+### Opción 3: Bare Metal (Mac/Linux)
+
+```bash
+./scripts/bootstrap-local.sh
+```
+
+## ⚙️ Configuración Post-Deploy
+
+1. **Anthropic API Key**
+   ```bash
+   openclaw auth add anthropic --mode api_key
+   ```
+
+2. **Discord Bot**
+   - Crear bot en https://discord.com/developers
+   - Copiar token
+   - Actualizar config
+
+3. **Gmail (opcional)**
+   ```bash
+   gog auth add tu@email.com --services gmail,calendar
+   ```
+
+4. **Twitter (opcional)**
+   - Obtener cookies AUTH_TOKEN y CT0
+   - Configurar en ~/.bashrc
+
+## 📁 Estructura del Workspace
+
+```
+/root/agent/
+├── SOUL.md              # Personalidad del agente
+├── AGENTS.md            # Instrucciones operativas
+├── USER.md              # Info del usuario (tú)
+├── IDENTITY.md          # Nombre, avatar, etc.
+├── MEMORY.md            # Memoria de largo plazo
+├── TOOLS.md             # Notas de herramientas
+├── HEARTBEAT.md         # Tareas de heartbeat
+├── JUDGMENT-RULES.md    # Reglas de decisión
+├── memory/              # Logs diarios
+│   └── YYYY-MM-DD.md
+├── scripts/             # Scripts de automatización
+├── projects/            # Proyectos activos
+├── skills/              # Skills custom
+└── .secrets/            # Credenciales (chmod 600)
+```
+
+## 🔧 Variables de Entorno Requeridas
+
+```bash
+# Core
+ANTHROPIC_API_KEY=sk-ant-...
+
+# Google (opcional)
+GOG_KEYRING_PASSWORD=...
+GOG_ACCOUNT=tu@email.com
+GEMINI_API_KEY=...
+
+# Twitter (opcional)
+AUTH_TOKEN=...
+CT0=...
+
+# Dashboard (opcional)
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+```
+
+## 📱 Cron Jobs Incluidos
+
+| Job | Frecuencia | Descripción |
+|-----|------------|-------------|
+| Email Classifier | 15 min | Clasifica emails con AI |
+| Morning Briefing | 8 AM L-V | Resumen diario |
+| Twitter Activity | 2 horas | Engagement social |
+| BTC Alert | 4 horas | Alertas de precio |
+
+## 🔒 Seguridad
+
+- UFW habilitado (solo 22, 80, 443)
+- SSH solo con keys
+- Archivos sensibles con chmod 600
+- Secrets en variables de entorno
+
+## 📖 Documentación
+
+- [Configuración detallada](docs/configuration.md)
+- [Personalización del agente](docs/customization.md)
+- [Agregar integraciones](docs/integrations.md)
+- [Troubleshooting](docs/troubleshooting.md)
+
+## 🤝 Créditos
+
+Template basado en Chiquitín 🦀 - el asistente AI de @mexaverse
