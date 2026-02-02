@@ -176,11 +176,46 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 - Archivos sensibles con chmod 600
 - Secrets en variables de entorno
 
+## 🖥️ Dashboard (Opcional)
+
+El template incluye **Autonomis Dashboard** - un Mission Control visual para tu agente.
+
+**Repo:** https://github.com/chiquitinbot/autonomis-dashboard
+
+### Features:
+- Kanban de tareas con drag & drop
+- Perfiles de agentes
+- Chat con agentes
+- Broadcast a todos los agentes
+- Live feed de actividad
+- Mobile responsive
+
+### Deploy:
+
+1. **Fork el repo** del dashboard
+
+2. **Crear proyecto en Supabase:**
+   - Ir a https://supabase.com
+   - Crear proyecto
+   - Correr el SQL de `supabase-schema.sql`
+
+3. **Deploy en Vercel:**
+   ```bash
+   # En el repo del dashboard
+   vercel --prod
+   # Agregar env vars:
+   # NEXT_PUBLIC_SUPABASE_URL
+   # NEXT_PUBLIC_SUPABASE_ANON_KEY
+   ```
+
+4. **Conectar con tu agente** via webhooks de Supabase
+
 ## 📖 Documentación
 
 - [Configuración detallada](docs/configuration.md)
 - [Personalización del agente](docs/customization.md)
 - [Agregar integraciones](docs/integrations.md)
+- [Dashboard setup](docs/dashboard.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ## 🤝 Créditos
