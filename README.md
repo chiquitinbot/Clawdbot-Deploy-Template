@@ -1,25 +1,40 @@
-# 🤖 Autonomis Agent Template
+# 🤖 Clawdbot Deploy Template
 
-Template completo para desplegar un agente AI personal con la arquitectura de Chiquitín.
+**Deploy automatizado de OpenClaw AI agents en segundos.**
+
+Infraestructura como código para desplegar tu propio agente AI personal — ya sea en tu máquina local o en un VPS de Digital Ocean. Todo automatizado, seguro, y listo para producción.
+
+## 🚀 Quick Start
+
+```bash
+# 1. Clonar
+git clone https://github.com/chiquitinbot/Clawdbot-Deploy-Template
+cd Clawdbot-Deploy-Template
+
+# 2. Configurar (lee PREREQUISITES.md primero)
+cp .env.example .env
+nano .env  # Llenar con tus API keys
+
+# 3. Validar configuración
+./scripts/validate-env.sh
+
+# 4. Deploy
+./scripts/bootstrap-vps.sh      # Para VPS
+# o
+./scripts/bootstrap-local.sh    # Para Mac/Linux local
+# o
+cd terraform && terraform apply  # Para nuevo droplet en DO
+```
 
 ## ⚠️ ANTES DE EMPEZAR
 
-**Lee [PREREQUISITES.md](PREREQUISITES.md) primero!**
+**Lee [PREREQUISITES.md](PREREQUISITES.md) para obtener todas las API keys necesarias.**
 
-Necesitas tener listas TODAS tus API keys y credenciales antes de correr cualquier script.
-
-### Quick Checklist:
-- [ ] Anthropic API Key (obligatorio)
-- [ ] Discord Bot Token O Telegram Bot Token (al menos uno)
-- [ ] Gemini API Key (recomendado, es gratis)
-- [ ] Digital Ocean Token (si usas Terraform)
-
-```bash
-# Validar que tienes todo configurado:
-cp .env.example .env
-# Editar .env con tus valores
-./scripts/validate-env.sh
-```
+### Checklist mínimo:
+- [ ] Anthropic API Key o Claude Max subscription
+- [ ] Discord Bot Token O Telegram Bot Token
+- [ ] (Opcional) Gemini API Key - gratis, para tareas económicas
+- [ ] (Opcional) Digital Ocean Token - si usas Terraform
 
 ---
 
@@ -44,7 +59,7 @@ cp .env.example .env
 - **Supabase** - Base de datos para dashboard
 
 ### Dashboard
-- **Autonomis Dashboard** - Next.js + Supabase
+- **Agent Dashboard** - Next.js + Supabase (Mission Control UI)
 - **Mission Control** - Kanban de tareas
 - **Agent Profiles** - Visualización de agentes
 
@@ -221,7 +236,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 
 ## 🖥️ Dashboard (Opcional)
 
-El template incluye **Autonomis Dashboard** - un Mission Control visual para tu agente.
+El template incluye un **Dashboard visual** (Mission Control) para gestionar tu agente.
 
 **Repo:** https://github.com/chiquitinbot/autonomis-dashboard
 
