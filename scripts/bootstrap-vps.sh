@@ -66,13 +66,11 @@ apt-get upgrade -y -qq
 echo -e "${YELLOW}📦 Installing dependencies...${NC}"
 apt-get install -y -qq curl git jq ufw python3 python3-pip
 
-# Docker is optional - uncomment if needed
-# if ! command -v docker &> /dev/null; then
-#     echo -e "${YELLOW}🐳 Installing Docker...${NC}"
-#     curl -fsSL https://get.docker.com | sh
-#     systemctl enable docker
-#     systemctl start docker
-# fi
+# Install Nginx
+echo -e "${YELLOW}🌐 Installing Nginx...${NC}"
+apt-get install -y -qq nginx
+systemctl enable nginx
+systemctl start nginx
 
 # Install Node.js 22
 if ! command -v node &> /dev/null; then

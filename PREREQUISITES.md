@@ -38,13 +38,21 @@
 | ☐ Discord Channel ID | Click derecho en canal > Copy Channel ID | `DISCORD_CHANNEL_ID` |
 | ☐ Telegram Bot Token | https://t.me/BotFather → /newbot | `TELEGRAM_BOT_TOKEN` |
 
-### ☁️ Infraestructura (si usas Terraform)
+### 🌐 Dominio (OBLIGATORIO)
+
+| Item | Dónde obtenerlo | Variable |
+|------|-----------------|----------|
+| ☐ Dominio registrado | Namecheap, Cloudflare, GoDaddy, etc. | `DOMAIN` |
+| ☐ Subdominio para el agente | Ej: agent.tudominio.com | `AGENT_SUBDOMAIN` |
+
+> 💡 El dominio es necesario para SSL (HTTPS) y webhooks. Puedes usar un subdominio de un dominio que ya tengas.
+
+### ☁️ Infraestructura (VPS)
 
 | Item | Dónde obtenerlo | Variable |
 |------|-----------------|----------|
 | ☐ Digital Ocean Token | https://cloud.digitalocean.com/account/api/tokens | `DO_TOKEN` |
 | ☐ SSH Key Fingerprint | `doctl compute ssh-key list` o DO dashboard | `SSH_KEY_NAME` |
-| ☐ Dominio (opcional) | Tu registrar de dominios | `DOMAIN` |
 
 ### 📧 Google Workspace (opcional)
 
@@ -143,7 +151,33 @@
 
 ---
 
-### 5. Digital Ocean (para Terraform)
+### 5. Dominio y DNS (OBLIGATORIO)
+
+Necesitas un dominio para SSL y webhooks.
+
+**Opción A: Usar subdominio de dominio existente**
+
+1. Ve al panel de DNS de tu dominio (Cloudflare, Namecheap, etc.)
+2. Crea un registro A:
+   - Nombre: `agent` (o el subdominio que quieras)
+   - Tipo: A
+   - Valor: IP de tu VPS (la obtienes después de crear el droplet)
+   - TTL: Auto o 300
+
+**Opción B: Registrar dominio nuevo**
+
+1. Compra un dominio en Namecheap, Cloudflare, etc. (~$10-15/año)
+2. Apunta los nameservers a Digital Ocean (opcional) o configura DNS en el registrar
+3. Crea registro A apuntando a tu VPS
+
+**Ejemplo de configuración DNS:**
+```
+agent.midominio.com  →  A  →  167.99.123.45  (IP del VPS)
+```
+
+---
+
+### 6. Digital Ocean (para Terraform)
 
 1. Ve a https://cloud.digitalocean.com/account/api/tokens
 2. Click "Generate New Token"

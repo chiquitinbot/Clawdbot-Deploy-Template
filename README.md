@@ -13,28 +13,36 @@ cd Clawdbot-Deploy-Template
 
 # 2. Configurar (lee PREREQUISITES.md primero)
 cp .env.example .env
-nano .env  # Llenar con tus API keys
+nano .env  # Llenar con tus API keys y DOMINIO
 
 # 3. Validar configuración
 ./scripts/validate-env.sh
 
-# 4. Deploy
-./scripts/bootstrap-vps.sh      # Para VPS
-# o
-./scripts/bootstrap-local.sh    # Para Mac/Linux local
-# o
-cd terraform && terraform apply  # Para nuevo droplet en DO
+# 4. Deploy (elige uno)
+./scripts/bootstrap-vps.sh           # VPS existente
+./scripts/bootstrap-local.sh         # Mac/Linux local
+cd terraform && terraform apply       # Nuevo droplet en DO
+
+# 5. Configurar SSL (después de que DNS apunte al servidor)
+./scripts/setup-nginx-ssl.sh agent.tudominio.com
+
+# 6. Iniciar OpenClaw
+openclaw wizard        # Configurar por primera vez
+openclaw gateway start # Iniciar el agente
 ```
 
 ## ⚠️ ANTES DE EMPEZAR
 
-**Lee [PREREQUISITES.md](PREREQUISITES.md) para obtener todas las API keys necesarias.**
+**Lee [PREREQUISITES.md](PREREQUISITES.md) para obtener todo lo necesario.**
 
-### Checklist mínimo:
-- [ ] Anthropic API Key o Claude Max subscription
-- [ ] Discord Bot Token O Telegram Bot Token
-- [ ] (Opcional) Gemini API Key - gratis, para tareas económicas
-- [ ] (Opcional) Digital Ocean Token - si usas Terraform
+### Checklist obligatorio:
+- [ ] **Dominio** - Necesitas un dominio/subdominio (ej: agent.tusite.com)
+- [ ] **Anthropic API Key** o Claude Max subscription
+- [ ] **Discord Bot Token** O **Telegram Bot Token** (al menos uno)
+
+### Recomendado:
+- [ ] Gemini API Key - gratis, para tareas económicas
+- [ ] Digital Ocean Token - si usas Terraform
 
 ---
 

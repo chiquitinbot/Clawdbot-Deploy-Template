@@ -1,0 +1,73 @@
+# Clawdbot Nginx Configuration
+# Replace ${DOMAIN} with your actual domain
+
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    server_name ${DOMAIN};
+    
+    # Let's Encrypt verification
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+    
+    # Redirect everything else to HTTPS
+    location / {
+        return 301 https://$server_name$request_uri;
+    }
+}
+
+# HTTPS Server
+server {
+    listen 443 ssl http2;
+    server_name ${DOMAIN};
+
+    # SSL Certificates (Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+    
+    # Modern SSL Configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Webhook endpoint for external services
+    location /webhook {
+        proxy_pass http://127.0.0.1:18789;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        proxy_read_timeout 60s;
+        proxy_connect_timeout 60s;
+    }
+
+    # Dashboard (if deployed locally)
+    location / {
+        # Option 1: Proxy to local dashboard (if running)
+        # proxy_pass http://127.0.0.1:3000;
+        
+        # Option 2: Static page showing agent status
+        root /var/www/clawdbot;
+        index index.html;
+        try_files $uri $uri/ =404;
+    }
+
+    # Health check endpoint
+    location /health {
+        access_log off;
+        return 200 "OK\n";
+        add_header Content-Type text/plain;
+    }
+}

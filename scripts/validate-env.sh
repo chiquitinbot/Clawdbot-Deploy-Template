@@ -62,6 +62,7 @@ echo "  REQUIRED - Agent won't work without these"
 echo "═══════════════════════════════════════════"
 echo ""
 
+check_required "DOMAIN" "Your domain/subdomain (e.g., agent.mysite.com)"
 check_required "ANTHROPIC_API_KEY" "Get from: https://console.anthropic.com/settings/keys"
 
 echo ""
