@@ -2,6 +2,27 @@
 
 Template completo para desplegar un agente AI personal con la arquitectura de Chiquitín.
 
+## ⚠️ ANTES DE EMPEZAR
+
+**Lee [PREREQUISITES.md](PREREQUISITES.md) primero!**
+
+Necesitas tener listas TODAS tus API keys y credenciales antes de correr cualquier script.
+
+### Quick Checklist:
+- [ ] Anthropic API Key (obligatorio)
+- [ ] Discord Bot Token O Telegram Bot Token (al menos uno)
+- [ ] Gemini API Key (recomendado, es gratis)
+- [ ] Digital Ocean Token (si usas Terraform)
+
+```bash
+# Validar que tienes todo configurado:
+cp .env.example .env
+# Editar .env con tus valores
+./scripts/validate-env.sh
+```
+
+---
+
 ## 📋 Qué incluye
 
 ### Core
