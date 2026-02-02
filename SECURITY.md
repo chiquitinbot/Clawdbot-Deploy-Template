@@ -22,8 +22,7 @@ ufw enable
 
 **Puertos bloqueados por defecto:**
 - ❌ 8080 (APIs internas)
-- ❌ 5678 (n8n)
-- ❌ 18789 (OpenClaw gateway)
+- ❌ 18789 (OpenClaw gateway interno)
 - ❌ Todos los demás
 
 ### 2. Permisos de Archivos
@@ -148,24 +147,7 @@ certbot certonly --standalone -d tu-dominio.com
 systemctl status certbot.timer
 ```
 
-### 4. Docker Security
-
-```bash
-# No correr containers como root cuando sea posible
-docker run --user 1000:1000 ...
-
-# Limitar recursos
-docker run --memory=512m --cpus=1 ...
-
-# No exponer puertos innecesariamente
-# ❌ MAL:
-docker run -p 8080:8080 ...  # Expone a internet
-
-# ✅ BIEN:
-docker run -p 127.0.0.1:8080:8080 ...  # Solo localhost
-```
-
-### 5. Backups Encriptados
+### 4. Backups Encriptados
 
 ```bash
 # Backup del workspace
@@ -275,5 +257,4 @@ apt list --upgradable 2>/dev/null | wc -l
 
 - [Digital Ocean Security Best Practices](https://docs.digitalocean.com/products/droplets/how-to/secure/)
 - [SSH Hardening Guide](https://www.ssh-audit.com/hardening_guides.html)
-- [Docker Security](https://docs.docker.com/engine/security/)
 - [OWASP Security Guidelines](https://owasp.org/www-project-web-security-testing-guide/)

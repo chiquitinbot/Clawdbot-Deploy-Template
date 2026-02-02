@@ -44,9 +44,6 @@ if ufw status | grep -q "Status: active"; then
     if ufw status | grep -q "8080.*ALLOW.*Anywhere"; then
         check_fail "Port 8080 is open to public (should be localhost only)"
     fi
-    if ufw status | grep -q "5678.*ALLOW.*Anywhere"; then
-        check_fail "Port 5678 (n8n) is open to public"
-    fi
 else
     check_fail "UFW is NOT active - run: ufw enable"
 fi
@@ -161,20 +158,16 @@ else
     check_warn "Automatic updates not configured"
 fi
 
-echo -e "\n${BLUE}═══ DOCKER SECURITY ═══${NC}"
+echo -e "\n${BLUE}═══ OPENCLAW STATUS ═══${NC}"
 
-if command -v docker &> /dev/null; then
-    # Check for containers running as root
-    ROOT_CONTAINERS=$(docker ps --format '{{.Names}}' 2>/dev/null | wc -l)
-    echo "       $ROOT_CONTAINERS containers running"
-    
-    # Check for exposed ports
-    EXPOSED_PORTS=$(docker ps --format '{{.Ports}}' 2>/dev/null | grep "0.0.0.0" | wc -l)
-    if [ "$EXPOSED_PORTS" -gt 0 ]; then
-        check_warn "$EXPOSED_PORTS containers expose ports to 0.0.0.0"
+if command -v openclaw &> /dev/null; then
+    if pgrep -f "openclaw" > /dev/null; then
+        check_pass "OpenClaw gateway is running"
+    else
+        echo "       OpenClaw installed but not running"
     fi
 else
-    echo "       Docker not installed"
+    echo "       OpenClaw not installed"
 fi
 
 # Summary

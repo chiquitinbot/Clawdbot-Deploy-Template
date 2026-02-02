@@ -8,10 +8,10 @@ packages:
   - git
   - jq
   - ufw
-  - docker.io
-  - docker-compose
   - python3
   - python3-pip
+  - fail2ban
+  - unattended-upgrades
 
 write_files:
   # Bootstrap script
@@ -214,12 +214,12 @@ write_files:
       AGENT_NAME=${agent_name}
 
 runcmd:
-  # Enable Docker
-  - systemctl enable docker
-  - systemctl start docker
+  # Enable security services
+  - systemctl enable fail2ban
+  - systemctl start fail2ban
   
   # Run bootstrap
   - bash /root/bootstrap-agent.sh
   
   # Start OpenClaw (after manual wizard)
-  - echo "Run 'openclaw gateway start' after completing wizard"
+  - echo "Run 'openclaw wizard' then 'openclaw gateway start'"

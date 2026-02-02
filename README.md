@@ -53,10 +53,9 @@ cd terraform && terraform apply  # Para nuevo droplet en DO
 - **Google Calendar** - Eventos y recordatorios
 
 ### Infraestructura
-- **Docker** - n8n, nginx, servicios custom
 - **UFW** - Firewall configurado
-- **SSL** - Certificados Let's Encrypt
-- **Supabase** - Base de datos para dashboard
+- **SSL** - Certificados Let's Encrypt (opcional)
+- **Supabase** - Base de datos para dashboard (opcional)
 
 ### Dashboard
 - **Agent Dashboard** - Next.js + Supabase (Mission Control UI)
@@ -73,29 +72,25 @@ cd terraform && terraform apply  # Para nuevo droplet en DO
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     DIGITAL OCEAN VPS                        │
-│  ┌─────────────────────────────────────────────────────────┐│
-│  │                      NGINX (443)                         ││
-│  │         SSL + Reverse Proxy + WebSocket                  ││
-│  └─────────────────────────────────────────────────────────┘│
-│           │                    │                             │
-│           ▼                    ▼                             │
-│  ┌──────────────┐    ┌──────────────┐                       │
-│  │     n8n      │    │   CrewAI     │                       │
-│  │   (5678)     │    │   (8080)     │                       │
-│  └──────────────┘    └──────────────┘                       │
+│                    LOCAL / VPS                               │
 │                                                              │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │                    OPENCLAW GATEWAY                      ││
+│  │                                                         ││
 │  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐    ││
 │  │  │ Discord │  │Telegram │  │  Cron   │  │  Tools  │    ││
+│  │  │   Bot   │  │   Bot   │  │  Jobs   │  │ gog/bird│    ││
 │  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘    ││
+│  │                                                         ││
+│  │  ┌─────────────────────────────────────────────────┐   ││
+│  │  │              AI Model (Claude)                   │   ││
+│  │  └─────────────────────────────────────────────────┘   ││
 │  └─────────────────────────────────────────────────────────┘│
 │                           │                                  │
 │                           ▼                                  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │                      WORKSPACE                           ││
-│  │   /root/agent/                                          ││
+│  │   ~/agent/                                              ││
 │  │   ├── SOUL.md          (Personalidad)                   ││
 │  │   ├── AGENTS.md        (Instrucciones)                  ││
 │  │   ├── USER.md          (Info del usuario)               ││
@@ -110,8 +105,8 @@ cd terraform && terraform apply  # Para nuevo droplet en DO
 ┌─────────────────────────────────────────────────────────────┐
 │                    SERVICIOS EXTERNOS                        │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
-│  │ Anthropic│  │ Google  │  │ Supabase│  │ Discord │        │
-│  │   API   │  │  APIs   │  │   DB    │  │   Bot   │        │
+│  │Anthropic│  │ Google  │  │ Discord │  │ Telegram│        │
+│  │ Claude  │  │ Gemini  │  │   API   │  │   API   │        │
 │  └─────────┘  └─────────┘  └─────────┘  └─────────┘        │
 └─────────────────────────────────────────────────────────────┘
 ```
